@@ -1,0 +1,64 @@
+Add Players (POST):
+
+Implement an endpoint for adding players to the database.
+
+javascript
+Copy code
+app.post('/players', async (req, res) => {
+  try {
+    const newPlayer = new Player(req.body);
+    await newPlayer.save();
+    res.status(201).json(newPlayer);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+Update Players (PATCH):
+
+Implement an endpoint for updating players by ID.
+
+javascript
+Copy code
+app.patch('/players/:playerId', async (req, res) => {
+  try {
+    const updatedPlayer = await Player.findByIdAndUpdate(req.params.playerId, req.body, { new: true });
+    if (!updatedPlayer) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+    res.status(200).json(updatedPlayer);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+Delete Players (DELETE):
+
+Implement an endpoint for deleting players by ID.
+
+javascript
+Copy code
+app.delete('/players/:playerId', async (req, res) => {
+  try {
+    const deletedPlayer = await Player.findByIdAndRemove(req.params.playerId);
+    if (!deletedPlayer) {
+      return res.status(404).json({ message: 'Player not found' });
+    }
+    res.status(204).send();
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+Perform Queries (GET):
+
+You can implement endpoints for each of the queries defined earlier. Here's an example of an endpoint that handles queries using JSON to describe the query:
+
+javascript
+Copy code
+app.post('/players/query', async (req, res) => {
+  try {
+    const query = req.body;
+    const result = await Player.find(query);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
